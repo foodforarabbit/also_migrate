@@ -32,6 +32,11 @@ module AlsoMigrate
           end
         
           def create_tables(config)
+            if config[:database]
+              conn_config = ActiveRecord::Base.configurations[Rails.env]
+              conn_config[:database] = config.delete :database
+              ActiveRecord::Base.establish_connection conn_config
+            end
             [ config[:destination] ].flatten.compact.each do |new_table|
               if !connection.table_exists?(new_table) && connection.table_exists?(config[:source])
                 columns = connection.columns(config[:source]).collect(&:name)
