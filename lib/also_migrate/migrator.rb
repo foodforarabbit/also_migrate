@@ -42,6 +42,7 @@ module AlsoMigrate
                 columns = connection.columns(config[:source]).collect(&:name)
                 columns -= [ config[:subtract] ].flatten.compact.collect(&:to_s)
                 columns.collect! { |col| connection.quote_column_name(col) }
+                Rails.logger.info "xxxxxxxxxxxxxxxxnew table sql: #{new_table}"
                 if config[:indexes]
                   engine =
                     if connection.class.to_s.include?('Mysql')
